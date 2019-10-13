@@ -88,9 +88,9 @@ def findTCPflows(lists):
         counter = counter+1
         #print(counter)
     numFlows(tcpFlows)
-    traffic(tcpFlows)
     connectionDuration(tcpFlows)
     dataTransferred(tcpFlows)
+    traffic(tcpFlows)
 
 def numFlows(tcpFlows):
     numFlows = 0
@@ -114,32 +114,27 @@ def traffic(tcpFlows):
     #plt.show()
 
 def connectionDuration(tcpFlows):
-    flowDuration = []
+    flowtime = []
     for flowList in tcpFlows:
         for flow in flowList:
             if(flow['End']!=-1):
-                duration = (flow['End']-flow['Start'])       # duration is in seconds
-                flowDuration.append(duration)
-    flowDuration.sort()
-    """probability = []
-    totalFlows = len(flowDuration)
+                duration = (flow['End']-flow['Start'])/60       # duration is in seconds
+                flowtime.append(duration)
+    flowtime.sort()
+    print(flowtime)
+    probability = []
+    flowtime = [x*60 for x in flowtime]
+    totalFlows = len(flowtime)
+    end = flowtime[totalFlows-1]
     for i in range(totalFlows):
         probability.append(((i+1)*1.0)/totalFlows)
-    plt.plot(flowDuration,probability)
+    plt.plot(flowtime,probability)
     plt.title('# of Connections vs Connection Time')
+   # plt.axis([-500,end,-0.1,2.0])
     plt.show()
     plt.savefig(sys.argv[1]+'connectionTime.png')
     #plt.show()
-    print "numValidFlows: ",totalFlows"""
-    prob = []
-    maxlen = len(flowDuration)
-    #flowDuration = [x*60 for x in flowDuration]
-    for i in range(maxlen):
-        prob.append(((i+1)*1.0)/maxlen)
-    plt.plot(flowDuration,prob)
-    plt.axis([-50,flowDuration[len(flowDuration)-1],-0.1,1.1])
-    plt.title('CDF')
-    plt.show()
+    print "# of ValidFlows: ",totalFlows
 
 def dataTransferred(tcpFlows):
     flowDuration = []
